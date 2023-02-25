@@ -1,107 +1,112 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vandal skins</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles:wght@700&family=Poppins&display=swap" rel="stylesheet">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fuzzy+Bubbles:wght@700&family=Poppins&display=swap"
+        rel="stylesheet">
 </head>
 <style>
-    #vandalSkins
-    {
+    #vandalSkins {
         display: grid;
         grid-template-columns: repeat(3, 30%);
         justify-content: space-around;
         grid-row-gap: 3%;
         /* background-color: rgb(240, 118, 36); */
     }
-    #vandalSkins>div{
+
+    #vandalSkins>div {
         background-color: white;
     }
-    #vandalSkins>div>div{
+
+    #vandalSkins>div>div {
         overflow: hidden;
     }
-    #vandalSkins>div>div>img{
+
+    #vandalSkins>div>div>img {
         width: 100%;
         transition: 0.5s;
-        
+
     }
-    #vandalSkins>div>div>img:hover{
+
+    #vandalSkins>div>div>img:hover {
         scale: 1.2;
     }
-    #vandalSkins>div{
+
+    #vandalSkins>div {
         /* object-fit: contain; */
-       
+
         transition: 0.5s;
         padding: 20px;
         border-radius: 8px;
         cursor: pointer;
-        
+
     }
-    #vandalSkins>div:hover
-    {
+
+    #vandalSkins>div:hover {
         box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
     }
-    *{
+
+    * {
         font-family: 'Poppins', sans-serif;
     }
 </style>
+
 <body>
     <div id="vandalSkins">
-         
+
     </div>
 </body>
+
 </html>
 <script>
-  fetch('https://valorant-api.com/v1/weapons',{
-    method:'GET',
-   
-    headers: { 
-     "Content-type":"application/json; charset=UTF-8"
+    fetch('https://valorant-api.com/v1/weapons', {
+        method: 'GET',
+
+        headers: {
+            "Content-type": "application/json; charset=UTF-8"
+        }
+
+    })
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (body) {
+            console.log(body);
+            display(body);
+        })
+
+    let display = (body) => {
+
+        let data = body.data;
+        let vandalSkins = null
+        for (let i = 0; i < data.length; i++) {
+            if (data[i].displayName == "Vandal") {
+                console.log(data[i].skins);
+                vandalSkins = data[i].skins;
+                break;
+            }
+        }
+
+        for (let i = 0; i < vandalSkins.length; i++) {
+            if (vandalSkins[i].displayIcon != null && vandalSkins[i].displayName !== 'Random Favorite Skin' && vandalSkins[i].displayName !== 'Standard Vandal') {
+
+                let childDiv = document.createElement("div"); let smallDiv = document.createElement("div");
+                let img = document.createElement("img");
+                img.src = vandalSkins[i].displayIcon;
+                let displayName = document.createElement("h3");
+                displayName.innerText = vandalSkins[i].displayName;
+                smallDiv.append(img)
+                childDiv.append(smallDiv, displayName);
+                document.getElementById("vandalSkins").append(childDiv);
+            }
+        }
+
     }
-    
-  })
-  .then(function(response){
-    return response.json();
-  })
-  .then(function(body){
-    console.log(body);
-    display(body);
-  })
-
-  let display = (body) => {
-
-let data = body.data;
-let vandalSkins = null
- for(let i=0 ; i<data.length ; i++)
- {
-    if(data[i].displayName == "Vandal")
-    {
-       console.log(data[i].skins);
-       vandalSkins = data[i].skins;
-       break;
-    }
- }
-
- for(let i=0 ; i<vandalSkins.length ; i++)
- {
-    if(vandalSkins[i].displayIcon!=null && vandalSkins[i].displayName!=='Random Favorite Skin' && vandalSkins[i].displayName!=='Standard Vandal')
-    {
-
-        let childDiv = document.createElement("div");let smallDiv = document.createElement("div");
-        let img = document.createElement("img");
-        img.src = vandalSkins[i].displayIcon;
-        let displayName = document.createElement("h3");
-        displayName.innerText = vandalSkins[i].displayName;
-        smallDiv.append(img)
-        childDiv.append(smallDiv, displayName);
-        document.getElementById("vandalSkins").append(childDiv);
-    }
- }
-
-  }
 
 </script>
